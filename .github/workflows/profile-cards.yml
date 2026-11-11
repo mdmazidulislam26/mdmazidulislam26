@@ -1,0 +1,40 @@
+name: Refresh GitHub Profile Cards
+
+on:
+  schedule:
+    - cron: "23 0 * * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "README.md"
+      - ".github/workflows/profile-cards.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: profile-cards
+  cancel-in-progress: true
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout profile repository
+        uses: actions/checkout@v4
+
+      - name: Generate self-hosted profile cards
+        uses: seijikohara/profile-cards-action@v1.17.5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          username: ${{ github.repository_owner }}
+          cards: overview,languages,momentum,rhythm,contributions
+          output-dir: profile-cards
+          themes: light,dark
+          palette: purple
+          commit: true
+          commit-message: "chore(profile): refresh generated cards [skip ci]"
