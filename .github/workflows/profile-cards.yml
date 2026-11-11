@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Generate self-hosted profile cards
-        uses: seijikohara/profile-cards-action@v1.17.5
+        uses: seijikohara/profile-cards-action@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           username: ${{ github.repository_owner }}
